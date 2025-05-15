@@ -5,5 +5,4 @@ import { ErrorDetail } from '../dto/error-response.dto';
  */
 export const ERROR_CODE: Record<string, ErrorDetail> = {
   INTERNAL_SERVER_ERROR: { name: 'INTERNAL_SERVER_ERROR', message: '서버 오류' },
-  NOT_FOUND: { name: 'NOT_FOUND', message: '존재하지 않는 리소스' },
 };
