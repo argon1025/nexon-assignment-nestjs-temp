@@ -8,7 +8,7 @@ FROM node:${NODE_VERSION}-alpine AS base
 WORKDIR /usr/src/app
 
 # pnpm 설치 (package.json 에 명시된 버전 사용)
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable
 
 # -----------------
 # 2) deps Stage
