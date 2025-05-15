@@ -1,8 +1,9 @@
-import { ClassSerializerInterceptor, Module, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, ClassSerializerInterceptor, Module, ValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_FILTER, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 
 import { AllExceptionsFilter } from './common/exception/all-exception.filter';
+import { ERROR_CODE } from './common/exception/error-code';
 import { HealthController } from './health/health.controller';
 
 @Module({
@@ -26,6 +27,9 @@ import { HealthController } from './health/health.controller';
         whitelist: true,
         transform: true,
         forbidUnknownValues: true,
+        exceptionFactory: () => {
+          return new BadRequestException(ERROR_CODE.PARAMETER_INVALID);
+        },
       }),
     },
     {
