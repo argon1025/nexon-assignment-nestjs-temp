@@ -2,17 +2,25 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { ClsService } from 'nestjs-cls';
 
 import { AppModule } from './app.module';
+import { CustomLogger } from './common/Logger/custom-logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+  });
 
   // ConfigService
   const configService = app.get(ConfigService);
   const SERVICE_NAME = configService.getOrThrow<string>('SERVICE_NAME');
   const PORT = configService.getOrThrow<string>('PORT');
   const ENV = configService.getOrThrow<string>('NODE_ENV');
+
+  // Logger
+  const cls = app.get(ClsService);
+  app.useLogger(new CustomLogger(cls, configService));
 
   // Swagger
   if (ENV !== 'production') {
@@ -28,7 +36,7 @@ async function bootstrap() {
   }
 
   await app.listen(PORT);
-  Logger.log(`${SERVICE_NAME} is running on port ${PORT} in ${ENV}`);
+  Logger.log(`${SERVICE_NAME} is running on port ${PORT} in ${ENV}`, 'Bootstrap');
   Logger.log(`API Docs: http://localhost:${PORT}/api`);
 }
 bootstrap();
